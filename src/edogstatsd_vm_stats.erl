@@ -122,7 +122,7 @@ handle_info({timeout, R, ?TIMER_MSG}, S = #state{key=K, delay=D, timer_ref=R}) -
     edogstatsd:gauge([K,"run_queue"], erlang:statistics(run_queue), 1.00),
 
     %% Error logger backlog (lower is better)
-    {_, MQL} = process_info(whereis(error_logger), message_queue_len),
+    {_, MQL} = process_info(whereis(logger), message_queue_len),
     edogstatsd:gauge([K,"error_logger_queue_len"], MQL, 1.00),
 
     %% Memory usage. There are more options available, but not all were kept.
