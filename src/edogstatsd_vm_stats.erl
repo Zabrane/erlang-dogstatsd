@@ -66,9 +66,10 @@ init(BaseKey) ->
     Ref = erlang:start_timer(Delay, self(), ?TIMER_MSG),
     {{input,In},{output,Out}} = erlang:statistics(io),
     PrevGC = erlang:statistics(garbage_collection),
+    Key = BaseKey ++ "$.",
     case {sched_time_available(), stillir:get_config(edogstatsd, vm_stats_scheduler)} of
         {true, true} ->
-            {ok, #state{key = [BaseKey,$.],
+            {ok, #state{key = Key,
                         timer_ref = Ref,
                         delay = Delay,
                         sched_time = enabled,
@@ -76,14 +77,14 @@ init(BaseKey) ->
                         prev_io = {In,Out},
                         prev_gc = PrevGC}};
         {true, _} ->
-            {ok, #state{key = [BaseKey,$.],
+            {ok, #state{key = Key,
                         timer_ref = Ref,
                         delay = Delay,
                         sched_time = disabled,
                         prev_io = {In,Out},
                         prev_gc = PrevGC}};
         {false, _} ->
-            {ok, #state{key = [BaseKey,$.],
+            {ok, #state{key = Key,
                         timer_ref = Ref,
                         delay = Delay,
                         sched_time = unavailable,
